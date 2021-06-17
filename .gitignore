@@ -1,0 +1,15 @@
+/output
+/temp
+/bin
+/lib
+.idea
+*build-*
+/CMakeFiles
+.DS_Store
+*.mp4
+*.mp3
+*.zip
+*.yuv
+*.h264
+*.dylib
+*.a
