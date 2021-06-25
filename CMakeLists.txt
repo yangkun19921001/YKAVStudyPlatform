@@ -14,11 +14,14 @@ SET(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall")         # Release模式�
 include_directories(./avcore/bsparser)
 add_subdirectory(./avcore/bsparser)
 
+#加载 media
+add_subdirectory(avcore/media)
+
 #加载 demo 示例
 aux_source_directory(./sample DEMO)
 add_executable(ykavstudyplatform ${DEMO})
 
-target_link_libraries(ykavstudyplatform bsparser)
+target_link_libraries(ykavstudyplatform bsparser )
 
 
 
