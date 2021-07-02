@@ -164,7 +164,7 @@ int more_rbsp_data(h264_stream_t *h, bs_t *b) {
     return 1;
 }
 
-// see ffmpeg h264_ps.c
+// see muxer h264_ps.c
 int more_rbsp_data_in_pps(h264_stream_t *h, bs_t *b) {
     int profile_idc = h->sps->profile_idc;
     int constraint_set_flags = 0;

@@ -1,11 +1,11 @@
 # vim: ts=2 sw=2
-# - Try to find the required ffmpeg components(default: AVFORMAT, AVUTIL, AVCODEC)
+# - Try to find the required muxer components(default: AVFORMAT, AVUTIL, AVCODEC)
 #
 # Once done this will define
 #  FFMPEG_FOUND         - System has the all required components.
 #  FFMPEG_INCLUDE_DIRS  - Include directory necessary for using the required components headers.
-#  FFMPEG_LIBRARIES     - Link these to use the required ffmpeg components.
-#  FFMPEG_DEFINITIONS   - Compiler switches required for using the required ffmpeg components.
+#  FFMPEG_LIBRARIES     - Link these to use the required muxer components.
+#  FFMPEG_DEFINITIONS   - Compiler switches required for using the required muxer components.
 #
 # For each of the components it will additionaly set.
 #   - AVCODEC

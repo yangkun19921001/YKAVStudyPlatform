@@ -43,7 +43,7 @@ public:
 
 public:
     /**
-     * 初始化 ffmpeg
+     * 初始化 muxer
      * @param inpath 输入文件路径，可以以 file 也可以是网络流
      * @param outpath
      * @return 1 is ok
@@ -59,7 +59,7 @@ public:
     virtual int StartMuxer(double aTempo, double vTempo, TEMPO_LIST tempoList);
 
     /**
-    * 释放 ffmpeg 解封装
+    * 释放 muxer 解封装
     * @return
     */
     virtual int CloseMuxer();

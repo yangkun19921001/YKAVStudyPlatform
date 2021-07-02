@@ -176,14 +176,14 @@ int main(int argc, char *argv[]) {
             cout << "==============================end==============================" << endl;
             cout << "==============================end==============================" << endl;
 //          YSleep(3000);
-            int ms = 3000; //三秒位置 根据时间基数（分数）转换
-            long long pos = (double) ms / (double) 1000 / r2d(ic->streams[videoStream]->time_base);
-            re = av_seek_frame(ic, videoStream, pos, AVSEEK_FLAG_BACKWARD | AVSEEK_FLAG_FRAME);
-            if (re >= 0) {
-                cout << "av_seek_frame success   " << endl;
-            }
-            continue;
-//            break;
+//            int ms = 3000; //三秒位置 根据时间基数（分数）转换
+//            long long pos = (double) ms / (double) 1000 / r2d(ic->streams[videoStream]->time_base);
+//            re = av_seek_frame(ic, videoStream, pos, AVSEEK_FLAG_BACKWARD | AVSEEK_FLAG_FRAME);
+//            if (re >= 0) {
+//                cout << "av_seek_frame success   " << endl;
+//            }
+//            continue;
+            break;
         }
 
         cout << "pkt->size = " << pkt->size << endl;

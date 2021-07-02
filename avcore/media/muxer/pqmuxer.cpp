@@ -33,7 +33,7 @@ int FFmpegMuxer::InitFFmpeg(const char *inpath, const char *outpath) {
     }
     const char *in_filename_v = inpath;
     const char *out_filename = outpath;
-    //注册 ffmpeg 所有函数
+    //注册 muxer 所有函数
     av_register_all();
     //初始化 FFmpeg 网络框架
     avformat_network_init();
