@@ -3649,23 +3649,9 @@ void show_help_default(const char *opt, const char *arg) {
     );
 }
 
-int run(int argc, char **argv);
-int main() {
-    char **argv = malloc(sizeof(char **));
-    argv[0] = calloc(100, sizeof(char *));
-    argv[1] = calloc(100, sizeof(char *));
-//    argv[2] = calloc(100, sizeof(char *));
-//    argv[3] = calloc(100, sizeof(char *));
-    argv[0] = "/Users/devyk/Data/Project/sample/github_code/YKAVStudyPlatform/bin/ffplay-debug";
-//    argv[1] = "-ss";
-//    argv[2] = "20";
-    argv[1] = "/Users/devyk/Data/Project/sample/github_code/YKAVStudyPlatform/temp/test.mp4";
-
-    run(2, argv);
-}
 
 /* Called from the main */
-int run(int argc, char **argv) {
+int main(int argc, char **argv) {
     int flags;
     VideoState *is;
 

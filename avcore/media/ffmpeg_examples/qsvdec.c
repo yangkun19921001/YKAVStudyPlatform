@@ -29,7 +29,6 @@
  * frames in the GPU video surfaces.
  */
 
-#include "config.h"
 
 #include <stdio.h>
 
@@ -70,7 +69,8 @@ static int get_format(AVCodecContext *avctx, const enum AVPixelFormat *pix_fmts)
             frames_ctx->height            = FFALIGN(avctx->coded_height, 32);
             frames_ctx->initial_pool_size = 32;
 
-            frames_hwctx->frame_type = MFX_MEMTYPE_VIDEO_MEMORY_DECODER_TARGET;
+//            frames_hwctx->frame_type = MFX_MEMTYPE_VIDEO_MEMORY_DECODER_TARGET;
+            frames_hwctx->frame_type = 20;
 
             ret = av_hwframe_ctx_init(avctx->hw_frames_ctx);
             if (ret < 0)

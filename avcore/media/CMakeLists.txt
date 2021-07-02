@@ -68,7 +68,7 @@ target_link_libraries(ffplay-debug
         avcodec avdevice avfilter avformat avutil swscale swresample SDL2
         )
 ############################   ffmpeg 命令 ###############################
-include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg/)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg/)
 set(FFMPEG_SRC
         ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg/ffmpeg.c
         ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg/ffmpeg_opt.c
@@ -82,11 +82,113 @@ target_link_libraries(ffmpeg-debug
         )
 
 ############################   ffprobe 命令 ###############################
-include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/ffprobe/)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ffprobe/)
 set(FFPROBE_SRC
         ${CMAKE_CURRENT_SOURCE_DIR}/ffprobe/ffprobe.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/utils/cmdutils.c
         )
 add_executable(ffprobe-debug ${FFPROBE_SRC})
 target_link_libraries(ffprobe-debug
         avcodec avdevice avfilter avformat avutil swscale swresample
         )
+
+############################   ffmpeg-examples 例子 ###############################
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg_examples/)
+add_executable(avio_dir_cmd-debug ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg_examples/avio_dir_cmd.c)
+add_executable(avio_reading-debug ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg_examples/avio_reading.c)
+add_executable(decode_audio-debug ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg_examples/decode_audio.c)
+add_executable(decode_video-debug ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg_examples/decode_video.c)
+add_executable(demuxing_decoding-debug ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg_examples/demuxing_decoding.c)
+add_executable(encode_audio-debug ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg_examples/encode_audio.c)
+add_executable(encode_video-debug ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg_examples/encode_video.c)
+add_executable(extract_mvs-debug ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg_examples/extract_mvs.c)
+add_executable(filter_audio-debug ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg_examples/filter_audio.c)
+add_executable(filtering_audio-debug ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg_examples/filtering_audio.c)
+add_executable(filtering_video-debug ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg_examples/filtering_video.c)
+add_executable(http_multiclient-debug ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg_examples/http_multiclient.c)
+add_executable(hw_decode-debug ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg_examples/hw_decode.c)
+add_executable(metadata-debug ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg_examples/metadata.c)
+add_executable(muxing-debug ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg_examples/muxing.c)
+#add_executable(qsvdec-debug ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg_examples/qsvdec.c)
+add_executable(remuxing-debug ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg_examples/remuxing.c)
+add_executable(resampling_audio-debug ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg_examples/resampling_audio.c)
+add_executable(scaling_video-debug ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg_examples/scaling_video.c)
+add_executable(transcode_aac-debug ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg_examples/transcode_aac.c)
+add_executable(transcoding-debug ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg_examples/transcoding.c)
+add_executable(vaapi_encode-debug ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg_examples/vaapi_encode.c)
+add_executable(vaapi_transcode-debug ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg_examples/vaapi_transcode.c)
+
+target_link_libraries(avio_dir_cmd-debug
+        avcodec avdevice avfilter avformat avutil swscale swresample
+        )
+target_link_libraries(transcoding-debug
+        avcodec avdevice avfilter avformat avutil swscale swresample
+        )
+target_link_libraries(avio_reading-debug
+        avcodec avdevice avfilter avformat avutil swscale swresample
+        )
+target_link_libraries(vaapi_transcode-debug
+        avcodec avdevice avfilter avformat avutil swscale swresample
+        )
+target_link_libraries(decode_audio-debug
+        avcodec avdevice avfilter avformat avutil swscale swresample
+        )
+target_link_libraries(decode_video-debug
+        avcodec avdevice avfilter avformat avutil swscale swresample
+        )
+target_link_libraries(demuxing_decoding-debug
+        avcodec avdevice avfilter avformat avutil swscale swresample
+        )
+target_link_libraries(encode_audio-debug
+        avcodec avdevice avfilter avformat avutil swscale swresample
+        )
+target_link_libraries(encode_video-debug
+        avcodec avdevice avfilter avformat avutil swscale swresample
+        )
+target_link_libraries(extract_mvs-debug
+        avcodec avdevice avfilter avformat avutil swscale swresample
+        )
+target_link_libraries(filter_audio-debug
+        avcodec avdevice avfilter avformat avutil swscale swresample
+        )
+target_link_libraries(filtering_audio-debug
+        avcodec avdevice avfilter avformat avutil swscale swresample
+        )
+target_link_libraries(filtering_video-debug
+        avcodec avdevice avfilter avformat avutil swscale swresample
+        )
+target_link_libraries(http_multiclient-debug
+        avcodec avdevice avfilter avformat avutil swscale swresample
+        )
+target_link_libraries(hw_decode-debug
+        avcodec avdevice avfilter avformat avutil swscale swresample
+        )
+target_link_libraries(metadata-debug
+        avcodec avdevice avfilter avformat avutil swscale swresample
+        )
+target_link_libraries(muxing-debug
+        avcodec avdevice avfilter avformat avutil swscale swresample
+        )
+#target_link_libraries(qsvdec-debug
+#        avcodec avdevice avfilter avformat avutil swscale swresample
+#        )
+target_link_libraries(remuxing-debug
+        avcodec avdevice avfilter avformat avutil swscale swresample
+        )
+target_link_libraries(resampling_audio-debug
+        avcodec avdevice avfilter avformat avutil swscale swresample
+        )
+target_link_libraries(scaling_video-debug
+        avcodec avdevice avfilter avformat avutil swscale swresample
+        )
+target_link_libraries(transcode_aac-debug
+        avcodec avdevice avfilter avformat avutil swscale swresample
+        )
+target_link_libraries(vaapi_encode-debug
+        avcodec avdevice avfilter avformat avutil swscale swresample
+        )
+target_link_libraries(vaapi_transcode-debug
+        avcodec avdevice avfilter avformat avutil swscale swresample
+        )
+
+

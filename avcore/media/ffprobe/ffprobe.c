@@ -49,8 +49,8 @@
 #include "libswresample/swresample.h"
 #include "libpostproc/postprocess.h"
 #include "cmdutils.h"
-
-#define HAVE_THREADS 0
+#include <pthread.h>
+#define HAVE_THREADS 1
 #if !HAVE_THREADS
 #  ifdef pthread_mutex_lock
 #    undef pthread_mutex_lock
@@ -2027,7 +2027,7 @@ static int show_log(WriterContext *w, int section_ids, int section_id, int log_l
 
     return 0;
 }
-
+static void devyk(){}
 static void show_packet(WriterContext *w, InputFile *ifile, AVPacket *pkt, int packet_idx)
 {
     char val_str[128];
@@ -3107,7 +3107,7 @@ static void ffprobe_show_pixel_formats(WriterContext *w)
     int i, n;
 
     writer_print_section_header(w, SECTION_ID_PIXEL_FORMATS);
-    while (pixdesc = av_pix_fmt_desc_next(pixdesc)) {
+    while (pixdesc == av_pix_fmt_desc_next(pixdesc)) {
         writer_print_section_header(w, SECTION_ID_PIXEL_FORMAT);
         print_str("name", pixdesc->name);
         print_int("nb_components", pixdesc->nb_components);

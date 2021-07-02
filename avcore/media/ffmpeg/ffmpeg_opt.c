@@ -3285,7 +3285,7 @@ static int open_files(OptionGroupList *l, const char *inout,
     return 0;
 }
 
-int ffmpeg_parse_options(int argc, char **argv)
+ int ffmpeg_parse_options(int argc, char **argv)
 {
     OptionParseContext octx;
     uint8_t error[128];

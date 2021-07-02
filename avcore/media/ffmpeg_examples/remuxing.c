@@ -75,6 +75,7 @@ int main(int argc, char **argv)
         goto end;
     }
 
+
     av_dump_format(ifmt_ctx, 0, in_filename, 0);
 
     avformat_alloc_output_context2(&ofmt_ctx, NULL, NULL, out_filename);
@@ -130,7 +131,6 @@ int main(int argc, char **argv)
             goto end;
         }
     }
-
     ret = avformat_write_header(ofmt_ctx, NULL);
     if (ret < 0) {
         fprintf(stderr, "Error occurred when opening output file\n");
