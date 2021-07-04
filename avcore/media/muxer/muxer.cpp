@@ -782,3 +782,15 @@ void MP4Muxer::setAVTempo(double aTempo,double vTempo) {
     if (vTempo > 0.0)
         this->mVideoTempo = vTempo;
 }
+
+
+//int main(int argc, char *argv[]) {
+//    printf("请查看 main 函数中使用方式");
+//    MP4Muxer *mp4Muxer = new MP4Muxer();
+//    mp4Muxer->Start(argv[1]);
+//    mp4Muxer->setAVTempo(1.0, 0.1);
+//    mp4Muxer->AppendAudio();
+//    mp4Muxer->AppendVideo();
+//    mp4Muxer->Stop();
+//    return 1;
+//}

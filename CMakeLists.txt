@@ -16,12 +16,14 @@ add_subdirectory(./avcore/bsparser)
 
 #加载 media
 add_subdirectory(avcore/media)
+#加载 qt
+add_subdirectory(avcore/qt)
 
 #加载 demo 示例
 aux_source_directory(./sample DEMO)
 add_executable(ykavstudyplatform ${DEMO})
 
-target_link_libraries(ykavstudyplatform bsparser )
+target_link_libraries(ykavstudyplatform bsparser)
 
 
 

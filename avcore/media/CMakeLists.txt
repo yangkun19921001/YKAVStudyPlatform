@@ -48,8 +48,6 @@ target_link_libraries(decode-debug
 #target_link_libraries(muxer-debug
 #        avcodec avdevice avfilter avformat avutil swscale swresample
 #        )
-
-
 ############################   倍数合成   ###############################
 add_library(tempo_muxer SHARED ${FFMPEG_TEMPO_MUXER_SRC} ${FFMPEG_MUXER_SRC} muxer/h264ToMp4.cpp muxer/h264ToMp4.h muxer/pqmuxer.cpp muxer/pqmuxer.h)
 add_executable(tempo_muxer-debug ${FFMPEG_TEMPO_MUXER_SRC} ${FFMPEG_MUXER_SRC} muxer/h264ToMp4.cpp muxer/h264ToMp4.h muxer/pqmuxer.cpp muxer/pqmuxer.h)
