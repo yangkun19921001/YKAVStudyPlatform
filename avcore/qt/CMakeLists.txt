@@ -8,8 +8,8 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
 set(QT_VERSION 5)
-set(REQUIRED_LIBS Core Gui Widgets Multimedia)
-set(REQUIRED_LIBS_QUALIFIED Qt5::Core Qt5::Gui Qt5::Widgets Qt5::Multimedia)
+set(REQUIRED_LIBS Core Gui Widgets Multimedia OpenGL)
+set(REQUIRED_LIBS_QUALIFIED Qt5::Core Qt5::Gui Qt5::Widgets Qt5::Multimedia Qt5::OpenGL)
 
 if (NOT CMAKE_PREFIX_PATH)
     message(WARNING "CMAKE_PREFIX_PATH is not defined, you may need to set it "
@@ -22,8 +22,20 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/audio)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/video)
 
 set(QT_AUDIO_SRC
-        ${CMAKE_CURRENT_SOURCE_DIR}/audio/QAudioPlayer.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/audio/main.cpp audio/pcmplay.cpp)
+       audio/QAudioPlayer.cpp
+       audio/main.cpp
+       audio/pcmplay.cpp
+        )
 
 add_executable(qt-audio-debug ${QT_AUDIO_SRC})
 target_link_libraries(qt-audio-debug ${REQUIRED_LIBS_QUALIFIED})
+
+set(QT_VIDEO_SRC
+        video/main.cpp
+        video/qyuvplayer.cpp
+        video/qyuvplayer.h
+        video/qyuvplayer.ui
+        video/QYUVWidget.cpp
+        video/QYUVWidget.h)
+add_executable(qt-video-debug ${QT_VIDEO_SRC})
+target_link_libraries(qt-video-debug ${REQUIRED_LIBS_QUALIFIED})

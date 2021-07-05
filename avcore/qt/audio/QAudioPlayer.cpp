@@ -17,8 +17,8 @@ AudioTest::~AudioTest() {
 }
 
 void AudioTest::initializeWindow() {
-    QWidget *window = new QWidget;
-    QVBoxLayout *layout = new QVBoxLayout;
+    auto *window = new QWidget;
+    auto *layout = new QVBoxLayout;
 
     m_deviceBox = new QComboBox(this);
     const QAudioDeviceInfo &defaultDeviceInfo = QAudioDeviceInfo::defaultOutputDevice();

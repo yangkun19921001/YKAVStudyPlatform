@@ -58,8 +58,14 @@ target_link_libraries(tempo_muxer-debug
         )
 
 ############################   ffplay 播放器 ###############################
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ffplay/include/)
-link_directories(${CMAKE_CURRENT_SOURCE_DIR}/ffplay/lib)
+#依赖源码
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/ffplay/sdl2.0.14)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ffplay/sdl2.0.14/include/)
+
+#依赖编译好的库
+#include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ffplay/include/)
+#link_directories(${CMAKE_CURRENT_SOURCE_DIR}/ffplay/lib)
+
 set(FFPLAY_SRC ${CMAKE_CURRENT_SOURCE_DIR}/ffplay/ffplay.c ${CMAKE_CURRENT_SOURCE_DIR}/utils/cmdutils.c)
 add_executable(ffplay-debug ${FFPLAY_SRC} ${FFMPEG_MUXER_SRC})
 target_link_libraries(ffplay-debug

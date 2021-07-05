@@ -3654,7 +3654,7 @@ void show_help_default(const char *opt, const char *arg) {
 int main(int argc, char **argv) {
     int flags;
     VideoState *is;
-
+    //windows 会调用 dll
     init_dynload();
 
     av_log_set_flags(AV_LOG_SKIP_REPEATED);
