@@ -22,9 +22,9 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/audio)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/video)
 
 set(QT_AUDIO_SRC
-       audio/QAudioPlayer.cpp
-       audio/main.cpp
-       audio/pcmplay.cpp
+        audio/QAudioPlayer.cpp
+        audio/main.cpp
+        audio/pcmplay.cpp
         )
 
 add_executable(qt-audio-debug ${QT_AUDIO_SRC})
