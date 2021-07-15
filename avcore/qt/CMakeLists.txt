@@ -31,8 +31,8 @@ add_executable(qt-audio-debug ${QT_AUDIO_SRC})
 target_link_libraries(qt-audio-debug ${REQUIRED_LIBS_QUALIFIED})
 
 set(QT_VIDEO_SRC
-        video/QYUVWidget.cpp
         video/QYUVWidget.h
+        video/QYUVWidget.cpp
         video/TestWidget.cpp
         video/TestWidget.h
         video/TestWidget.ui

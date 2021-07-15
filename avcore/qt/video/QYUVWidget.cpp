@@ -6,8 +6,6 @@
 #include "QYUVWidget.h"
 
 
-
-
 //顶点shader
 const char *vString = GET_STR(
         attribute vec4 vertexIn;
@@ -96,11 +94,9 @@ void QYUVWidget::initializeGL() {
     impl->mShaderProgram->bindAttributeLocation("textureIn", T_VER);
 
     //编译shader
-    qDebug() << "program.link() = " <<  impl->mShaderProgram->link();
+    qDebug() << "program.link() = " << impl->mShaderProgram->link();
 
-    qDebug() << "program.bind() = " <<  impl->mShaderProgram->bind();
-
-
+    qDebug() << "program.bind() = " << impl->mShaderProgram->bind();
 
     //从shader获取材质
     impl->textureUniformY = impl->mShaderProgram->uniformLocation("tex_y");
@@ -117,36 +113,21 @@ void QYUVWidget::initializeGL() {
 
 
     //创建材质
-//    glGenTextures(3, texs);
-//    impl->id_y = texs[0];
-//    impl->id_u = texs[1];
-//    impl->id_v = texs[2];
-
-
-    impl->mTextureY = new QOpenGLTexture(QOpenGLTexture::Target2D);
-    impl->mTextureU = new QOpenGLTexture(QOpenGLTexture::Target2D);
-    impl->mTextureV = new QOpenGLTexture(QOpenGLTexture::Target2D);
-    impl->mTextureY->create();
-    impl->mTextureU->create();
-    impl->mTextureV->create();
-
-    // Get the texture index value of the return y component
-    impl->id_y = impl->mTextureY->textureId();
-    // Get the texture index value of the returned u component
-    impl->id_u = impl->mTextureU->textureId();
-    // Get the texture index value of the returned v component
-    impl->id_v = impl->mTextureV->textureId();
-    glClearColor(0.3, 0.3, 0.3, 0.0);
+    glGenTextures(3, texs);
+    impl->id_y = texs[0];
+    impl->id_u = texs[1];
+    impl->id_v = texs[2];
+    glClearColor(0.0, 0.0, 0.0, 0.0);
 
 }
 
 void QYUVWidget::paintGL() {
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, impl->id_y); //0层绑定到Y材质
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
-    glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
-    glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
+    glActiveTexture(GL_TEXTURE0);//激活纹理单元GL_TEXTURE0,系统里面的
+    glBindTexture(GL_TEXTURE_2D, impl->id_y); //绑定y分量纹理对象id到激活的纹理单元
+//    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+//    glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+//    glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
+//    glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
 
     //创建 Y 数据纹理
     glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, impl->mVideoW, impl->mVideoH, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE,
@@ -177,6 +158,7 @@ void QYUVWidget::paintGL() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
     //与shader uni遍历关联
+    //指定y纹理要使用新值,只能用0,1,2等表示纹理单元的索引
     glUniform1i(impl->textureUniformY, 0);
     glUniform1i(impl->textureUniformU, 1);
     glUniform1i(impl->textureUniformV, 2);
@@ -190,5 +172,8 @@ void QYUVWidget::resizeGL(int w, int h) {
     glViewport(0, 0, w, h);
     update();
 }
+
+
+
 
 

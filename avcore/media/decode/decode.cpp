@@ -14,7 +14,8 @@ int main(int argc, char *argv[]) {
 //    const char * inpath = argv[1];
 //    const char * outpath = argv[2];
 //    const char *inpath = "https://clipres.yishihui.com/test/noBFrame.mp4";
-    const char *inpath = "/Users/devyk/Data/Project/sample/github_code/YKAVStudyPlatform/temp/clip.mp4";
+//    const char *inpath = "/Users/devyk/Data/Project/sample/github_code/YKAVStudyPlatform/temp/clip.mp4";
+    const char *inpath = "http://rescdn.yishihui.com/longvideo/video/vpc/20210714/6744560J44rosdoTZEK2y01X3";
     const char *outpath = "/Users/devyk/Downloads/0.mp4";
 
     //初始化网络库(可以打开 rtmp、rtsp、http 等协议的流媒体体视频)
@@ -331,6 +332,25 @@ int main(int argc, char *argv[]) {
                     cout << "swr_convert failed return len = " << len << endl;
                 }
             }
+        }
+
+        switch (frame->pict_type) {
+            case AV_PICTURE_TYPE_NONE:
+                printf("》》》》》》》》》》》》》》width=%d height=%d pts=%lld type=%s \n", frame->width, frame->height, frame->pts,
+                       "none");
+                break;
+            case AV_PICTURE_TYPE_I:
+                printf("》》》》》》》》》》》》》》width=%d height=%d pts=%lld type=%s \n", frame->width, frame->height, frame->pts,
+                       "I");
+                break;
+            case AV_PICTURE_TYPE_B:
+                printf("》》》》》》》》》》》》》》width=%d height=%d pts=%lld type=%s \n", frame->width, frame->height, frame->pts,
+                       "B");
+                break;
+            case AV_PICTURE_TYPE_P:
+                printf("》》》》》》》》》》》》》》width=%d height=%d pts=%lld type=%s \n", frame->width, frame->height, frame->pts,
+                       "P");
+                break;
         }
 
         //释放，引用计数-1 为0释放空间

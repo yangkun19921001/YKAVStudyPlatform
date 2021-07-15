@@ -10,14 +10,14 @@
 
 TestWidget::TestWidget(QWidget *parent) :
         QWidget(parent), impl(new TestWidgetImpl()) {
-    setMinimumSize(FRAME_WIDTH,FRAME_HEIGHT);
+//    setMinimumSize(FRAME_WIDTH/2,FRAME_HEIGHT/2);
     impl->ui->setupUi(this);
-    QGridLayout* wallLayout = new QGridLayout;
-    for (int i = 0; i < 4; ++i)
+    auto* wallLayout = new QGridLayout;
+    for (int i = 0; i < 1; ++i)
     {
-        for (int j = 0; j < 4; ++j)
+        for (int j = 0; j < 1; ++j)
         {
-            QYUVWidget* player = new QYUVWidget(this);
+            auto* player = new QYUVWidget(this);
             wallLayout->addWidget(player, i, j);
             impl->mPlayers.append(player);
         }
@@ -26,7 +26,7 @@ TestWidget::TestWidget(QWidget *parent) :
     wallLayout->setSpacing(2);
     wallLayout->setMargin(0);
     impl->ui->video->setLayout(wallLayout);
-    impl->ui->video->setMinimumSize(FRAME_WIDTH/2,FRAME_HEIGHT/2);
+//    impl->ui->video->setMinimumSize(FRAME_WIDTH/3,FRAME_HEIGHT/3);
 }
 
 TestWidget::~TestWidget() {

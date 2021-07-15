@@ -67,7 +67,6 @@ protected:
     void resizeGL(int w, int h) override;
 
 
-
 private:
     struct QYUVWidgetImpl;
     QScopedPointer<QYUVWidgetImpl> impl;
