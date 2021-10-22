@@ -1,0 +1,14 @@
+set(ffplay2
+        ffplay2/IObserver.cpp
+        ffplay2/IObserver.h
+        ffplay2/IThread.cpp
+        ffplay2/IThread.h
+        ffplay2/IDemux.cpp
+        ffplay2/IDemux.h
+        ffplay2/IDecode.cpp
+        ffplay2/IDecode.h
+        ffplay2/IResample.cpp
+        ffplay2/IResample.h
+        ffplay2/IMediaPlayer.cpp
+        ffplay2/IMediaPlayer.h
+        PARENT_SCOPE)

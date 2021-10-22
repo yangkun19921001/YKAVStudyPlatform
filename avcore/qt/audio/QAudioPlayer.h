@@ -44,7 +44,7 @@ private:
     QScopedPointer<PCMPlay> m_pcmplay;
     QScopedPointer<QAudioOutput> m_audioOutput;
 
-    bool m_pullMode = false;
+    bool m_pullMode = true;
 
 private slots:
 

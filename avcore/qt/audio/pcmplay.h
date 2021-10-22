@@ -12,10 +12,10 @@
 #include <QApplication>
 #include <QFile>
 #include <QThread>
+
 /**
  * pcm 播放
  */
-
 class PCMPlay : public QIODevice {
 Q_OBJECT
 

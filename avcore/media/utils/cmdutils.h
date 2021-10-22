@@ -484,7 +484,7 @@ int show_formats(void *optctx, const char *opt, const char *arg);
 int show_muxers(void *optctx, const char *opt, const char *arg);
 
 /**
- * Print a listing containing all the demuxer supported by the
+ * Print a listing containing all the remuxer supported by the
  * program (including devices).
  * This option processing function does not utilize the arguments.
  */

@@ -53,9 +53,9 @@
 #include "libavfilter/buffersink.h"
 #include "libavfilter/buffersrc.h"
 
-#define INPUT_SAMPLERATE     48000
+#define INPUT_SAMPLERATE     44100
 #define INPUT_FORMAT         AV_SAMPLE_FMT_FLTP
-#define INPUT_CHANNEL_LAYOUT AV_CH_LAYOUT_5POINT0
+#define INPUT_CHANNEL_LAYOUT AV_CH_LAYOUT_STEREO
 
 #define VOLUME_VAL 0.90
 

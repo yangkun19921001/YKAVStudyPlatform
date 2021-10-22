@@ -278,6 +278,19 @@ static int init_filter(FilteringContext* fctx, AVCodecContext *dec_ctx,
             av_log(NULL, AV_LOG_ERROR, "Cannot set output pixel format\n");
             goto end;
         }
+
+//        ret = avfilter_graph_parse_ptr(filter_graph, "fps=fps=10",
+//                                 &inputs, &outputs, NULL);
+//        if (ret < 0) {
+//            av_log(NULL, AV_LOG_ERROR, "Cannot set avfilter_graph_parse_ptr \n");
+//            goto end;
+//        }
+//        ret =  avfilter_graph_config(filter_graph, NULL);
+//        if (ret < 0) {
+//
+//            av_log(NULL, AV_LOG_ERROR, "Cannot set avfilter_graph_config \n");
+//            goto end;
+//        }
     } else if (dec_ctx->codec_type == AVMEDIA_TYPE_AUDIO) {
         buffersrc = avfilter_get_by_name("abuffer");
         buffersink = avfilter_get_by_name("abuffersink");
@@ -531,6 +544,10 @@ int main(int argc, char **argv)
             break;
         stream_index = packet.stream_index;
         type = ifmt_ctx->streams[packet.stream_index]->codecpar->codec_type;
+        if (type == AVMEDIA_TYPE_VIDEO)
+        {
+            printf("----");
+        }
         av_log(NULL, AV_LOG_DEBUG, "Demuxer gave frame of stream_index %u\n",
                 stream_index);
 
@@ -541,6 +558,10 @@ int main(int argc, char **argv)
                 ret = AVERROR(ENOMEM);
                 break;
             }
+
+            if (stream_ctx[stream_index].dec_ctx->time_base.den == 50)
+                stream_ctx[stream_index].dec_ctx->time_base.den = 25;
+
             av_packet_rescale_ts(&packet,
                                  ifmt_ctx->streams[stream_index]->time_base,
                                  stream_ctx[stream_index].dec_ctx->time_base);

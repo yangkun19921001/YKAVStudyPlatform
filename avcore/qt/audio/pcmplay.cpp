@@ -55,6 +55,7 @@ qint64 PCMPlay::readData(char *data, qint64 maxlen) {
 qint64 PCMPlay::writeData(const char *data, qint64 len) {
     Q_UNUSED(data);
     Q_UNUSED(len);
+    qDebug() << "writeData--->len=" << len << endl;
     return 0;
 }
 

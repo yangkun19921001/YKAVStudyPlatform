@@ -29,7 +29,7 @@
    Studio) will not omit unused inline functions and create undefined
    references to libraries that are not being built. */
 
-#include "compat/va_copy.h"
+//#include "compat/va_copy.h"
 #include "libavformat/avformat.h"
 #include "libavfilter/avfilter.h"
 #include "libavdevice/avdevice.h"
@@ -2010,7 +2010,7 @@ int show_help(void *optctx, const char *opt, const char *arg)
         show_help_codec(par, 0);
     } else if (!strcmp(topic, "encoder")) {
         show_help_codec(par, 1);
-    } else if (!strcmp(topic, "demuxer")) {
+    } else if (!strcmp(topic, "remuxer")) {
         show_help_demuxer(par);
     } else if (!strcmp(topic, "muxer")) {
         show_help_muxer(par);

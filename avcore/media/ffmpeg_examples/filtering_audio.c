@@ -36,7 +36,7 @@
 #include <libavfilter/buffersrc.h>
 #include <libavutil/opt.h>
 
-static const char *filter_descr = "aresample=8000,aformat=sample_fmts=s16:channel_layouts=mono";
+static const char *filter_descr = "aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=mono";
 static const char *player       = "ffplay -f s16le -ar 8000 -ac 1 -";
 
 static AVFormatContext *fmt_ctx;
@@ -52,6 +52,8 @@ static int open_input_file(const char *filename)
     AVCodec *dec;
 
     if ((ret = avformat_open_input(&fmt_ctx, filename, NULL, NULL)) < 0) {
+        char errorMessage[1024] = {0};
+        av_strerror(ret, errorMessage, sizeof(errorMessage));
         av_log(NULL, AV_LOG_ERROR, "Cannot open input file\n");
         return ret;
     }
@@ -92,9 +94,9 @@ static int init_filters(const char *filters_descr)
     const AVFilter *abuffersink = avfilter_get_by_name("abuffersink");
     AVFilterInOut *outputs = avfilter_inout_alloc();
     AVFilterInOut *inputs  = avfilter_inout_alloc();
-    static const enum AVSampleFormat out_sample_fmts[] = { AV_SAMPLE_FMT_S16, -1 };
-    static const int64_t out_channel_layouts[] = { AV_CH_LAYOUT_MONO, -1 };
-    static const int out_sample_rates[] = { 8000, -1 };
+    static const enum AVSampleFormat out_sample_fmts[] = { AV_SAMPLE_FMT_S16,AV_SAMPLE_FMT_FLTP, -1 };
+    static const int64_t out_channel_layouts[] = { AV_CH_LAYOUT_STEREO, -1 };
+    static const int out_sample_rates[] = { 44100, -1 };
     const AVFilterLink *outlink;
     AVRational time_base = fmt_ctx->streams[audio_stream_index]->time_base;
 
@@ -244,6 +246,7 @@ int main(int argc, char **argv)
                 break;
             }
 
+
             while (ret >= 0) {
                 ret = avcodec_receive_frame(dec_ctx, frame);
                 if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF) {
@@ -273,6 +276,8 @@ int main(int argc, char **argv)
                     av_frame_unref(frame);
                 }
             }
+
+
         }
         av_packet_unref(&packet);
     }
@@ -290,3 +295,5 @@ end:
 
     exit(0);
 }
+
+

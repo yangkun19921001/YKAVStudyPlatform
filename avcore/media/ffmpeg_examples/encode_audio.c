@@ -139,7 +139,7 @@ int main(int argc, char **argv)
     filename = argv[1];
 
     /* find the MP2 encoder */
-    codec = avcodec_find_encoder(AV_CODEC_ID_MP2);
+    codec = avcodec_find_encoder(AV_CODEC_ID_AAC);
     if (!codec) {
         fprintf(stderr, "Codec not found\n");
         exit(1);
@@ -155,7 +155,7 @@ int main(int argc, char **argv)
     c->bit_rate = 64000;
 
     /* check that the encoder supports s16 pcm input */
-    c->sample_fmt = AV_SAMPLE_FMT_S16;
+    c->sample_fmt = AV_SAMPLE_FMT_FLTP;
     if (!check_sample_fmt(codec, c->sample_fmt)) {
         fprintf(stderr, "Encoder does not support sample format %s",
                 av_get_sample_fmt_name(c->sample_fmt));

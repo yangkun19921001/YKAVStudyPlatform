@@ -54,7 +54,6 @@
 # include "libavfilter/buffersink.h"
 # include "libavfilter/buffersrc.h"
 #endif
-
 #include <SDL.h>
 #include <SDL_thread.h>
 

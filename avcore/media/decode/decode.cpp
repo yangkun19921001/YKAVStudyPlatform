@@ -2,7 +2,7 @@
 // Created by 阳坤 on 2021/6/21.
 //
 #include "decode.h"
-
+#include "../utils/tools.h"
 int main(int argc, char *argv[]) {
     printf("configure=%s \n", avcodec_configuration());
 
@@ -15,7 +15,8 @@ int main(int argc, char *argv[]) {
 //    const char * outpath = argv[2];
 //    const char *inpath = "https://clipres.yishihui.com/test/noBFrame.mp4";
 //    const char *inpath = "/Users/devyk/Data/Project/sample/github_code/YKAVStudyPlatform/temp/clip.mp4";
-    const char *inpath = "http://rescdn.yishihui.com/longvideo/video/vpc/20210714/6744560J44rosdoTZEK2y01X3";
+//    const char *inpath = "http://rescdn.yishihui.com/longvideo/video/vpc/20210714/6744560J44rosdoTZEK2y01X3";
+    const char *inpath = "/Users/devyk/Downloads/win-qt-10.png";
     const char *outpath = "/Users/devyk/Downloads/0.mp4";
 
     //初始化网络库(可以打开 rtmp、rtsp、http 等协议的流媒体体视频)
@@ -232,6 +233,15 @@ int main(int argc, char *argv[]) {
                     break;
                 case AV_PIX_FMT_NV21:
                     cout << "avcodec_receive_frame format = AV_PIX_FMT_NV21" << " " << frame->linesize[0] << endl;
+                    break;
+                case AV_PIX_FMT_RGBA:
+                    cout << "avcodec_receive_frame format = AV_PIX_FMT_RGBA" << " " << frame->linesize[0] << endl;
+                    break;
+                case AV_PIX_FMT_ARGB:
+                    cout << "avcodec_receive_frame format = AV_PIX_FMT_ARGB" << " " << frame->linesize[0] << endl;
+                    break;
+                case AV_PIX_FMT_ABGR:
+                    cout << "avcodec_receive_frame format = AV_PIX_FMT_ABGR" << " " << frame->linesize[0] << endl;
                     break;
                 default:
                     break;

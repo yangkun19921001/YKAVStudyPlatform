@@ -56,17 +56,20 @@ void AudioTest::initializeWindow() {
     window->show();
 }
 
-#include "pcmplay.h"
 
 void AudioTest::initializeAudio(const QAudioDeviceInfo &audioDeviceInfo) {
     QAudioFormat format;
+    //设置采样率
     format.setSampleRate(this->sampleRate);
+    //设置通道
     format.setChannelCount(this->channelCount);
+    //设置采样位数
     format.setSampleSize(this->sampleSize);
     format.setCodec("audio/pcm");
     format.setByteOrder(QAudioFormat::LittleEndian);
     format.setSampleType(QAudioFormat::SignedInt);
     QAudioDeviceInfo info(audioDeviceInfo);
+    //该设置是否支持
     bool audioDeviceOk = info.isFormatSupported(format);
     if (!audioDeviceOk) {
         qWarning() << "Default format not supported - trying to use nearest";

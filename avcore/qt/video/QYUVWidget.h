@@ -72,8 +72,6 @@ private:
     QScopedPointer<QYUVWidgetImpl> impl;
 
 private:
-    //shader中yuv变量地址
-    GLuint unis[3] = {0};
     //openg的 texture地址
     GLuint texs[3] = {0};
 
@@ -107,10 +105,6 @@ struct QYUVWidget::QYUVWidgetImpl
     QOpenGLShader*          mVShader;
     QOpenGLShader*          mFShader;
     QOpenGLShaderProgram*   mShaderProgram;
-
-    QOpenGLTexture*         mTextureY;
-    QOpenGLTexture*         mTextureU;
-    QOpenGLTexture*         mTextureV;
 
     GLuint                  id_y, id_u, id_v;
     int                     textureUniformY, textureUniformU, textureUniformV;

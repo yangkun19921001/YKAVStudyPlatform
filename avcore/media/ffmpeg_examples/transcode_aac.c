@@ -103,7 +103,7 @@ static int open_input_file(const char *filename,
         return AVERROR(ENOMEM);
     }
 
-    /* Initialize the stream parameters with demuxer information. */
+    /* Initialize the stream parameters with remuxer information. */
     error = avcodec_parameters_to_context(avctx, (*input_format_context)->streams[0]->codecpar);
     if (error < 0) {
         avformat_close_input(input_format_context);
@@ -179,6 +179,7 @@ static int open_output_file(const char *filename,
 
     /* Find the encoder to be used by its name. */
     if (!(output_codec = avcodec_find_encoder(AV_CODEC_ID_AAC))) {
+//    if (!(output_codec = avcodec_find_encoder(AV_CODEC_ID_MP3))) {
         fprintf(stderr, "Could not find an AAC encoder.\n");
         goto cleanup;
     }
@@ -289,7 +290,7 @@ static int init_resampler(AVCodecContext *input_codec_context,
          * Set the conversion parameters.
          * Default channel layouts based on the number of channels
          * are assumed for simplicity (they are sometimes not detected
-         * properly by the demuxer and/or decoder).
+         * properly by the remuxer and/or decoder).
          */
         *resample_context = swr_alloc_set_opts(NULL,
                                               av_get_default_channel_layout(output_codec_context->channels),

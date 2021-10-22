@@ -313,7 +313,7 @@ int main (int argc, char **argv)
         goto end;
     }
 
-    /* initialize packet, set data to NULL, let the demuxer fill it */
+    /* initialize packet, set data to NULL, let the remuxer fill it */
     av_init_packet(&pkt);
     pkt.data = NULL;
     pkt.size = 0;

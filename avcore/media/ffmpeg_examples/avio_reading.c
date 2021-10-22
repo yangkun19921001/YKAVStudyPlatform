@@ -24,7 +24,7 @@
  * @file
  * libavformat AVIOContext API example.
  *
- * Make libavformat demuxer access media content through a custom
+ * Make libavformat remuxer access media content through a custom
  * AVIOContext read callback.
  * @example avio_reading.c
  */

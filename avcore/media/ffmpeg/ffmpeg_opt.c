@@ -1049,7 +1049,7 @@ static int open_input_file(OptionsContext *o, const char *filename)
     if (o->nb_audio_channels) {
         /* because we set audio_channels based on both the "ac" and
          * "channel_layout" options, we need to check that the specified
-         * demuxer actually has the "channels" option before setting it */
+         * remuxer actually has the "channels" option before setting it */
         if (file_iformat && file_iformat->priv_class &&
             av_opt_find(&file_iformat->priv_class, "channels", NULL, 0,
                         AV_OPT_SEARCH_FAKE_OBJ)) {
@@ -1102,6 +1102,7 @@ static int open_input_file(OptionsContext *o, const char *filename)
     }
     /* open the input file with generic avformat function */
     err = avformat_open_input(&ic, filename, file_iformat, &o->g->format_opts);
+//    err = avformat_open_input(&ic, filename, 0, 0);
     if (err < 0) {
         print_error(filename, err);
         if (err == AVERROR_PROTOCOL_NOT_FOUND)
@@ -3184,7 +3185,7 @@ void show_help_default(const char *opt, const char *arg)
            "    -h      -- print basic options\n"
            "    -h long -- print more options\n"
            "    -h full -- print all options (including all format and codec specific options, very long)\n"
-           "    -h type=name -- print all options for the named decoder/encoder/demuxer/muxer/filter/bsf\n"
+           "    -h type=name -- print all options for the named decoder/encoder/remuxer/muxer/filter/bsf\n"
            "    See man %s for detailed description of the options.\n"
            "\n", program_name);
 
@@ -3539,7 +3540,7 @@ const OptionDef options[] = {
         "disposition", "" },
     { "thread_queue_size", HAS_ARG | OPT_INT | OPT_OFFSET | OPT_EXPERT | OPT_INPUT,
                                                                      { .off = OFFSET(thread_queue_size) },
-        "set the maximum number of queued packets from the demuxer" },
+        "set the maximum number of queued packets from the remuxer" },
     { "find_stream_info", OPT_BOOL | OPT_PERFILE | OPT_INPUT | OPT_EXPERT, { &find_stream_info },
         "read and decode the streams to fill missing information with heuristics" },
 

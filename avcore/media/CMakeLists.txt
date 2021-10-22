@@ -15,7 +15,7 @@ message(FFMPEG_HOME---> $ENV{FFMPEG_HOME})
 set(FFMPEG_HOME $ENV{FFMPEG_HOME})
 if (NOT DEFINED ENV{FFMPEG_HOME})
     message(not find path: FFMPEG_HOME)
-    set(FFMPEG_HOME /usr/local/Cellar/ffmpeg/4.3.1_8)
+    set(FFMPEG_HOME /usr/local/Cellar/ffmpeg/4.4_2)
 endif ()
 set(FFMPEG_PREFIX ${FFMPEG_HOME})
 message(FFMPEG_PREFIX----${FFMPEG_PREFIX})
@@ -42,7 +42,12 @@ target_link_libraries(decode-debug
         avcodec avdevice avfilter avformat avutil swscale swresample
         )
 
-############################   封装   ###############################
+############################   封装 2  ###############################
+add_executable(remuxer-debug remuxer/muxer.cpp remuxer/muxer.hpp)
+target_link_libraries(remuxer-debug
+        avcodec avdevice avfilter avformat avutil swscale swresample
+        )
+
 #add_library(muxer SHARED ${FFMPEG_MUXER_SRC})
 #add_executable(muxer-debug ${FFMPEG_MUXER_SRC})
 #target_link_libraries(muxer avcodec avdevice avfilter avformat avutil swscale swresample
@@ -59,20 +64,55 @@ target_link_libraries(tempo_muxer-debug
         avcodec avdevice avfilter avformat avutil swscale swresample
         )
 
+
+############################   fdk aac 编码  ###############################
+set(FFDK_SRC
+        encode/ffmpeg_fdk_aac_encode.cpp
+        encode/encode_aac.cpp
+        encode/encode_aac.h
+        )
+add_executable(fdkaac-debug ${FFDK_SRC})
+target_link_libraries(fdkaac-debug
+        avcodec avdevice avfilter avformat avutil swscale swresample
+        )
+
+set(FFDK_SRC_2
+        encode/audio_encode2.c
+        )
+add_executable(fdkaac-2-debug ${FFDK_SRC_2})
+target_link_libraries(fdkaac-2-debug
+        avcodec avdevice avfilter avformat avutil swscale swresample
+        )
 ############################   ffplay 播放器 ###############################
 #依赖源码
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/ffplay/sdl2.0.14)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ffplay/sdl2.0.14/include/)
-
-#依赖编译好的库
-#include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ffplay/include/)
-#link_directories(${CMAKE_CURRENT_SOURCE_DIR}/ffplay/lib)
 
 set(FFPLAY_SRC ${CMAKE_CURRENT_SOURCE_DIR}/ffplay/ffplay.c ${CMAKE_CURRENT_SOURCE_DIR}/utils/cmdutils.c)
 add_executable(ffplay-debug ${FFPLAY_SRC} ${FFMPEG_MUXER_SRC})
 target_link_libraries(ffplay-debug
         avcodec avdevice avfilter avformat avutil swscale swresample SDL2
         )
+
+############################   添加水印   ###############################
+
+add_executable(video_add_image_filter-debug filter/video_add_image_filter.c)
+target_link_libraries(decode avcodec avdevice avfilter avformat avutil swscale swresample
+        )
+target_link_libraries(video_add_image_filter-debug
+        avcodec avdevice avfilter avformat avutil swscale swresample
+        )
+
+############################   ffplay2 改造播放器 ###############################
+#//暂时有问题
+#add_subdirectory(ffplay2)
+#add_executable(ffplay2-debug
+#        ${ffplay2}
+#        ${CMAKE_CURRENT_SOURCE_DIR}/utils/log4z.cpp
+#        )
+#target_link_libraries(ffplay2-debug
+#        avcodec avdevice avfilter avformat avutil swscale swresample SDL2
+#        )
 ############################   ffmpeg 命令 ###############################
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg/)
 set(FFMPEG_SRC
@@ -110,6 +150,8 @@ add_executable(encode_video-debug ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg_examples/en
 add_executable(extract_mvs-debug ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg_examples/extract_mvs.c)
 add_executable(filter_audio-debug ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg_examples/filter_audio.c)
 add_executable(filtering_audio-debug ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg_examples/filtering_audio.c)
+add_executable(audioMix-debug ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg_examples/audioMix.cpp)
+add_executable(filtering_audio_amix-debug ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg_examples/filtering_audio_amix.c)
 add_executable(filtering_video-debug ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg_examples/filtering_video.c)
 add_executable(http_multiclient-debug ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg_examples/http_multiclient.c)
 add_executable(hw_decode-debug ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg_examples/hw_decode.c)
@@ -125,6 +167,9 @@ add_executable(vaapi_encode-debug ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg_examples/va
 add_executable(vaapi_transcode-debug ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg_examples/vaapi_transcode.c)
 
 target_link_libraries(avio_dir_cmd-debug
+        avcodec avdevice avfilter avformat avutil swscale swresample
+        )
+target_link_libraries(audioMix-debug
         avcodec avdevice avfilter avformat avutil swscale swresample
         )
 target_link_libraries(transcoding-debug
@@ -158,6 +203,9 @@ target_link_libraries(filter_audio-debug
         avcodec avdevice avfilter avformat avutil swscale swresample
         )
 target_link_libraries(filtering_audio-debug
+        avcodec avdevice avfilter avformat avutil swscale swresample
+        )
+target_link_libraries(filtering_audio_amix-debug
         avcodec avdevice avfilter avformat avutil swscale swresample
         )
 target_link_libraries(filtering_video-debug

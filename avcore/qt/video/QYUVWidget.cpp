@@ -112,7 +112,7 @@ void QYUVWidget::initializeGL() {
     glEnableVertexAttribArray(T_VER);
 
 
-    //创建材质
+    //创建 y,u,v 纹理 id
     glGenTextures(3, texs);
     impl->id_y = texs[0];
     impl->id_u = texs[1];
