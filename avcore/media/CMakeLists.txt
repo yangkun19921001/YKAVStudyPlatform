@@ -15,7 +15,7 @@ message(FFMPEG_HOME---> $ENV{FFMPEG_HOME})
 set(FFMPEG_HOME $ENV{FFMPEG_HOME})
 if (NOT DEFINED ENV{FFMPEG_HOME})
     message(not find path: FFMPEG_HOME)
-    set(FFMPEG_HOME /usr/local/Cellar/ffmpeg/4.4_2)
+    set(FFMPEG_HOME /usr/local/Cellar/ffmpeg/4.4.1_5)
 endif ()
 set(FFMPEG_PREFIX ${FFMPEG_HOME})
 message(FFMPEG_PREFIX----${FFMPEG_PREFIX})
@@ -41,6 +41,13 @@ target_link_libraries(decode avcodec avdevice avfilter avformat avutil swscale s
 target_link_libraries(decode-debug
         avcodec avdevice avfilter avformat avutil swscale swresample
         )
+
+############################   转码  ###############################
+
+add_executable(ffmpeg_transcode-debug ffmpeg_examples/ffmpeg_transcode.cpp)
+target_link_libraries(ffmpeg_transcode-debug
+avcodec avdevice avfilter avformat avutil swscale swresample
+)
 
 ############################   封装 2  ###############################
 add_executable(remuxer-debug remuxer/muxer.cpp remuxer/muxer.hpp)
@@ -105,14 +112,14 @@ target_link_libraries(video_add_image_filter-debug
 
 ############################   ffplay2 改造播放器 ###############################
 #//暂时有问题
-#add_subdirectory(ffplay2)
-#add_executable(ffplay2-debug
-#        ${ffplay2}
-#        ${CMAKE_CURRENT_SOURCE_DIR}/utils/log4z.cpp
-#        )
-#target_link_libraries(ffplay2-debug
-#        avcodec avdevice avfilter avformat avutil swscale swresample SDL2
-#        )
+add_subdirectory(ffplay-my)
+add_executable(ffplay-my-src-debug
+        ${ffplay-my-src}
+        ${CMAKE_CURRENT_SOURCE_DIR}/utils/log4z.cpp
+        )
+target_link_libraries(ffplay-my-src-debug
+        avcodec avdevice avfilter avformat avutil swscale swresample SDL2
+        )
 ############################   ffmpeg 命令 ###############################
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg/)
 set(FFMPEG_SRC

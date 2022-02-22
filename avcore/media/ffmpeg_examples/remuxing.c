@@ -42,7 +42,8 @@ static void log_packet(const AVFormatContext *fmt_ctx, const AVPacket *pkt, cons
            pkt->stream_index);
 }
 
-int main(int argc, char **argv) {
+
+int main2(int argc, char **argv) {
     AVOutputFormat *ofmt = NULL;
     AVFormatContext *ifmt_ctx = NULL, *ofmt_ctx = NULL;
     AVPacket pkt;
@@ -72,7 +73,6 @@ int main(int argc, char **argv) {
         fprintf(stderr, "Failed to retrieve input stream information");
         goto end;
     }
-
 
     av_dump_format(ifmt_ctx, 0, in_filename, 0);
 
@@ -199,4 +199,11 @@ int main(int argc, char **argv) {
     }
 
     return 0;
+}
+
+int main(int argc, char **argv) {
+    for (int i = 0; i < 3; ++i) {
+        printf("remuxing index=%d \n",i);
+        main2(argc,argv);
+    }
 }

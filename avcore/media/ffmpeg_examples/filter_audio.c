@@ -276,7 +276,6 @@ int main(int argc, char *argv[])
     uint8_t errstr[1024];
     float duration;
     int err, nb_frames, i;
-
     if (argc < 2) {
         fprintf(stderr, "Usage: %s <duration>\n", argv[0]);
         return 1;

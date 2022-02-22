@@ -3094,6 +3094,7 @@ static VideoState *stream_open(const char *filename, AVInputFormat *iformat) {
     is->audio_volume = startup_volume;
     is->muted = 0;
     is->av_sync_type = av_sync_type;
+    //读取流数量
     is->read_tid = SDL_CreateThread(read_thread, "read_thread", is);
     if (!is->read_tid) {
         av_log(NULL, AV_LOG_FATAL, "SDL_CreateThread(): %s\n", SDL_GetError());
@@ -3656,6 +3657,7 @@ int main(int argc, char **argv) {
     //windows 会调用 dll
     init_dynload();
 
+    //对 ffmpeg 初始化
     av_log_set_flags(AV_LOG_SKIP_REPEATED);
     parse_loglevel(argc, argv, options);
 
@@ -3663,6 +3665,7 @@ int main(int argc, char **argv) {
 #if CONFIG_AVDEVICE
     avdevice_register_all();
 #endif
+//    网络连接初始化
     avformat_network_init();
 
     init_opts();

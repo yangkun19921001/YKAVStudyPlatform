@@ -41,7 +41,7 @@
 
 //const char *filters_descr = "lutyuv='u=128:v=128'";
 const char *filters_descr = "fps=fps=25,scale=960:540,pad=1920:1080:(ow-iw)/2:(oh-ih)/2,setsar=1[out]";
-//²ÄÖÊÄÚ´æ¿Õ¼ä
+//ï¿½ï¿½ï¿½ï¿½ï¿½Ú´ï¿½Õ¼ï¿½
 unsigned char *datas[3] = {0};
 /* other way:
    scale=78:24 [scl]; [scl] transpose=cclock // assumes "[in]" and "[out]" to be input output pads respectively
@@ -227,12 +227,12 @@ static void writeYUV(const AVFrame *pFrame) {
 
 
 
-//    if (width == pFrame->linesize[0]) //ÎÞÐè¶ÔÆë
+//    if (width == pFrame->linesize[0]) //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 //    {
 //        memcpy(datas[0], pFrame->data[0], width * height);
 //        memcpy(datas[1], pFrame->data[1], width * height / 4);
 //        memcpy(datas[2], pFrame->data[2], width * height / 4);
-//    } else//ÐÐ¶ÔÆëÎÊÌâ
+//    } else//ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 //    {
 //        for (int i = 0; i < height; i++) //Y
 //            memcpy(datas[0] + width * i, pFrame->data[0] + pFrame->linesize[0] * i, width);
@@ -249,7 +249,7 @@ int main(int argc, char **argv) {
     AVFrame *pFrame;
     AVFrame *filt_frame;
 
-    char *inpath = "/Users/devyk/Data/Project/piaoquan/PQMedia/temp/199213.mp4";
+    char *inpath = "/Users/devyk/Data/Project/piaoquan/PQMedia/temp/1.mp4";
     char *outpath = "/Users/devyk/Downloads/dog.yuv";
 //    if (argc != 2) {
 //        fprintf(stderr, "Usage: %s file\n", argv[0]);

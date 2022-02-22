@@ -1053,6 +1053,7 @@ int configure_filtergraph(FilterGraph *fg)
         fg->graph->nb_threads = filter_complex_nbthreads;
     }
 
+    //ÊÓÆµÌí¼ÓÂË¾µ str=ÃèÊö·û
     if ((ret = avfilter_graph_parse2(fg->graph, graph_desc, &inputs, &outputs)) < 0)
         goto fail;
 

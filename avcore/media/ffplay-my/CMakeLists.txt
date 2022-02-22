@@ -1,0 +1,17 @@
+set(ffplay-my-src
+        ffplay-my/ff_tools.h
+        ffplay-my/ff_main.c
+        ffplay-my/ff_packet_queue.c
+        ffplay-my/ff_packet_queue.h
+        ffplay-my/ff_frame_queue.c
+        ffplay-my/ff_frame_queue.h
+        ffplay-my/ff_av_clock.c
+        ffplay-my/ff_av_clock.h
+        ffplay-my/ff_decoder.c
+        ffplay-my/ff_decoder.h
+        ffplay-my/ff_demuxer.c
+        ffplay-my/ff_demuxer.h
+        ffplay-my/ff_player.c
+        ffplay-my/ff_player.h
+        ffplay-my/ff_error.h
+        PARENT_SCOPE)

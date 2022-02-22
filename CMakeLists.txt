@@ -19,6 +19,9 @@ add_subdirectory(avcore/media)
 #加载 qt
 add_subdirectory(avcore/qt)
 
+#c++练习
+add_subdirectory(cplusplus)
+
 #C++ 实现消息队列
 add_subdirectory(avcore/looper)
 

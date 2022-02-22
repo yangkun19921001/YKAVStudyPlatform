@@ -155,6 +155,10 @@ static int open_output_file(const char *filename)
             if (dec_ctx->codec_type == AVMEDIA_TYPE_VIDEO) {
                 enc_ctx->height = dec_ctx->height;
                 enc_ctx->width = dec_ctx->width;
+
+//                enc_ctx->height = 1920;
+//                enc_ctx->width = 1080;
+
                 enc_ctx->sample_aspect_ratio = dec_ctx->sample_aspect_ratio;
                 /* take first format from list of supported formats */
                 if (encoder->pix_fmts)
@@ -365,10 +369,18 @@ static int init_filter(FilteringContext* fctx, AVCodecContext *dec_ctx,
         ret = AVERROR(ENOMEM);
         goto end;
     }
+//    if ((ret = avfilter_graph_parse_ptr(filter_graph, filter_spec,
+    if (dec_ctx->codec_type == AVMEDIA_TYPE_VIDEO){
+//        if ((ret = avfilter_graph_parse_ptr(filter_graph, "transpose=1,scale=1080:1920",
+        if ((ret = avfilter_graph_parse_ptr(filter_graph, "transpose=1",
+                                            &inputs, &outputs, NULL)) < 0)
+            goto end;
+    } else {
+        if ((ret = avfilter_graph_parse_ptr(filter_graph, filter_spec,
+                                            &inputs, &outputs, NULL)) < 0)
+            goto end;
+    }
 
-    if ((ret = avfilter_graph_parse_ptr(filter_graph, filter_spec,
-                    &inputs, &outputs, NULL)) < 0)
-        goto end;
 
     if ((ret = avfilter_graph_config(filter_graph, NULL)) < 0)
         goto end;

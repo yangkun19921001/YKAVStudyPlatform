@@ -324,6 +324,11 @@ int InitFilter(const char* filter_desc)
     const char* pad_name_net = "in2"; 
     char args_vol[512] = "-3dB";
     const char* pad_name_vol = "vol";
+
+    //1、创建滤镜管道，只需要一个
+    _filter_graph = avfilter_graph_alloc();
+
+    //2、创建源滤镜，用于接收要处理的AVFrame 有几路流就创建几路
     const AVFilter* filter_src_spk = NULL;
     filter_src_spk = avfilter_get_by_name("abuffer");
     if(filter_src_spk == NULL)
@@ -345,6 +350,7 @@ int InitFilter(const char* filter_desc)
         printf("fail to get avfilter ..\n");
         return -1;
     }
+    //修改声音音量
     const AVFilter* filter_src_vol = NULL;
     filter_src_vol = avfilter_get_by_name("volume");
     if(filter_src_vol == NULL)
@@ -352,13 +358,17 @@ int InitFilter(const char* filter_desc)
         printf("fail to get avfilter ..\n");
         return -1;
     }
+
+    // 3、创建输出滤镜，向外输出滤镜处理过的AVFrame  只需要一个
     const AVFilter* filter_sink = avfilter_get_by_name("abuffersink");
+
+    //创建处理音频数据的各个滤镜(通过滤镜描述符) 输入源有多个，那么就创建多个
     AVFilterInOut* filter_output_spk = avfilter_inout_alloc();
     AVFilterInOut* filter_output_mic = avfilter_inout_alloc();
     AVFilterInOut* filter_output_net = avfilter_inout_alloc();
     AVFilterInOut* filter_output_vol = avfilter_inout_alloc();
     AVFilterInOut* filter_input = avfilter_inout_alloc();
-    _filter_graph = avfilter_graph_alloc();
+
 
     //snprintf(args_spk, sizeof(args_spk), "time_base=%d/%d:sample_rate=%d:sample_fmt=%s:channel_layout=0x%I64x", 
     snprintf(args_spk, sizeof(args_spk), "time_base=%d/%d:sample_rate=%d:sample_fmt=%s:channel_layout=0x%" PRIx64,
@@ -388,6 +398,7 @@ int InitFilter(const char* filter_desc)
     //sprintf_s(args_mic, sizeof(args_mic), "time_base=%d/%d:sample_rate=%d:sample_fmt=%s:channel_layout=0x%I64x", _fmt_ctx_out->streams[_index_a_out]->codec->time_base.num, _fmt_ctx_out->streams[_index_a_out]->codec->time_base.den, _fmt_ctx_out->streams[_index_a_out]->codec->sample_rate, av_get_sample_fmt_name(_fmt_ctx_out->streams[_index_a_out]->codec->sample_fmt), _fmt_ctx_out->streams[_index_a_out]->codec->channel_layout);
 
 
+    //创建源滤镜，处理接收输入的 frame,有几路就创建几路
     int ret = 0;
     ret = avfilter_graph_create_filter(&_filter_ctx_src_spk, filter_src_spk, pad_name_spk, args_spk, NULL, _filter_graph);
     if (ret < 0)
@@ -407,12 +418,12 @@ int InitFilter(const char* filter_desc)
         printf("Filter: failed to call avfilter_graph_create_filter -- src net\n");
         return -1;
     }
-    /*ret = avfilter_graph_create_filter(&_filter_ctx_src_vol, filter_src_vol, pad_name_vol, args_vol, NULL, _filter_graph);
-    if (ret < 0)
-    {
-        printf("Filter: failed to call avfilter_graph_create_filter -- src net\n");
-        return -1;
-    }   */ 
+//    ret = avfilter_graph_create_filter(&_filter_ctx_src_vol, filter_src_vol, pad_name_vol, args_vol, NULL, _filter_graph);
+//    if (ret < 0)
+//    {
+//        printf("Filter: failed to call avfilter_graph_create_filter -- src net\n");
+//        return -1;
+//    }
     ret = avfilter_graph_create_filter(&_filter_ctx_sink, filter_sink, "out", NULL, NULL, _filter_graph);
     if (ret < 0)
     {
@@ -439,6 +450,7 @@ int InitFilter(const char* filter_desc)
         return -1;
     }
 
+    //递归的方式将各个滤镜链接起来
     filter_output_spk->name = av_strdup(pad_name_spk);
     filter_output_spk->filter_ctx = _filter_ctx_src_spk;
     filter_output_spk->pad_idx = 0;
@@ -460,6 +472,7 @@ int InitFilter(const char* filter_desc)
     filter_output_vol->pad_idx = 0;
     filter_output_vol->next = filter_input;
 
+
     filter_input->name = av_strdup("out");
     filter_input->filter_ctx = _filter_ctx_sink;
     filter_input->pad_idx = 0;
@@ -474,6 +487,7 @@ int InitFilter(const char* filter_desc)
     AVFilterInOut* filter_volinputs[2];
     filter_volinputs[0] = filter_output_vol;
     filter_volinputs[1] = filter_input;
+    //通过滤镜描述符创建并初始化各个滤镜并且按照滤镜描述符的顺序连接到一起
     ret = avfilter_graph_parse_ptr(_filter_graph, filter_desc, &filter_input, filter_outputs, NULL);
     //ret = avfilter_graph_parse_ptr(_filter_graph, filter_desc, filter_volinputs, filter_outputs, NULL);
     if (ret < 0)
@@ -482,6 +496,7 @@ int InitFilter(const char* filter_desc)
         return -1;
     }
 
+    //配置滤镜管道(初始化滤镜)
     ret = avfilter_graph_config(_filter_graph, NULL);
     if (ret < 0)
     {
