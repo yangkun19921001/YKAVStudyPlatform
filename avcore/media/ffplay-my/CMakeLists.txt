@@ -14,4 +14,6 @@ set(ffplay-my-src
         ffplay-my/ff_player.c
         ffplay-my/ff_player.h
         ffplay-my/ff_error.h
+        ffplay-my/ff_utils.c
+        ffplay-my/ff_utils.h
         PARENT_SCOPE)

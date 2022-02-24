@@ -41,6 +41,8 @@
 #include <libavutil/fifo.h>
 
 #include "ff_error.h"
+#include "ff_utils.h"
+#include "ff_options.h"
 
 #define VIDEO_PICTURE_QUEUE_SIZE    3       // 图像帧缓存数量
 #define SUBPICTURE_QUEUE_SIZE        16      // 字幕帧缓存数量
@@ -280,10 +282,25 @@ typedef struct FFplayer{
     AVInputFormat *iformat;//输入格式
 };
 
-
+/* options specified by the user */
+static const char *input_filename;
+static const char *window_title;
 static int startup_volume = 20;  // 起始音量
+extern AVDictionary *format_opts, *codec_opts, *resample_opts;
+static int genpts = 0;
+static int find_stream_info = 1;
+static int64_t start_time = AV_NOPTS_VALUE;
+static int seek_by_bytes = -1;
+static int show_status = 1;
+static const char* wanted_stream_spec[AVMEDIA_TYPE_NB] = {0};
+static int audio_disable;
+static int video_disable;
+static int subtitle_disable;
 static int av_sync_type = AV_SYNC_AUDIO_MASTER;
-
-
+static enum ShowMode show_mode = SHOW_MODE_NONE;
+static int default_width  = 640;
+static int default_height = 480;
+static int screen_width  = 0;
+static int screen_height = 0;
 
 #endif //YKAVSTUDYPLATFORM_FF_TOOLS_H

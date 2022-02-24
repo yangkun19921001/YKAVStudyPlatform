@@ -82,9 +82,52 @@ int ff_player_init(struct FFplayer *player) {
     int ret = ff_demuxer_init(is);
     if (ret != 0)
         goto fail;
-    ff_demuxer_start(is)
+    ff_demuxer_start(is);
     fail:
     ff_demuxer_close(is);
     ff_player_free(player);
     return 0;
+}
+
+ void set_default_window_size(int width, int height, AVRational sar) {
+    SDL_Rect rect;
+    int max_width = screen_width ? screen_width : INT_MAX;
+    int max_height = screen_height ? screen_height : INT_MAX;
+    if (max_width == INT_MAX && max_height == INT_MAX)
+        max_height = height;
+    calculate_display_rect(&rect, 0, 0, max_width, max_height, width, height, sar);
+    default_width = rect.w;
+    default_height = rect.h;
+}
+
+void calculate_display_rect(SDL_Rect *rect,
+                            int scr_xleft, int scr_ytop, int scr_width, int scr_height,
+                            int pic_width, int pic_height, AVRational pic_sar)
+{
+    AVRational aspect_ratio = pic_sar; // 比率
+    int64_t width, height, x, y;
+
+    if (av_cmp_q(aspect_ratio, av_make_q(0, 1)) <= 0)
+        aspect_ratio = av_make_q(1, 1);// 如果aspect_ratio是负数或者为0,设置为1:1
+    // 转成真正的播放比例
+    aspect_ratio = av_mul_q(aspect_ratio, av_make_q(pic_width, pic_height));
+
+    /* XXX: we suppose the screen has a 1.0 pixel ratio */
+    // 计算显示视频帧区域的宽高
+    // 先以高度为基准
+    height = scr_height;
+    // &~1, 取偶数宽度  1110
+    width = av_rescale(height, aspect_ratio.num, aspect_ratio.den) & ~1;
+    if (width > scr_width) {
+        // 当以高度为基准,发现计算出来的需要的窗口宽度不足时调整为以窗口宽度为基准
+        width = scr_width;
+        height = av_rescale(width, aspect_ratio.den, aspect_ratio.num) & ~1;
+    }
+    // 计算显示视频帧区域的起始坐标（在显示窗口内部的区域）
+    x = (scr_width - width) / 2;
+    y = (scr_height - height) / 2;
+    rect->x = scr_xleft + x;
+    rect->y = scr_ytop  + y;
+    rect->w = FFMAX((int)width,  1);
+    rect->h = FFMAX((int)height, 1);
 }
