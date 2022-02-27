@@ -5,26 +5,8 @@
 #include "ff_demuxer.h"
 
 
-/**
- * @brief 这里是设置给ffmpeg内部，当ffmpeg内部当执行耗时操作时（一般是在执行while或者for循环的数据读取时）
- *          就会调用该函数
- * @param ctx
- * @return 若直接退出阻塞则返回1，等待读取则返回0
- */
-
-static int decode_interrupt_cb(void *ctx)
-{
-    static int64_t s_pre_time = 0;
-    int64_t cur_time = av_gettime_relative() / 1000;
-    //    printf("decode_interrupt_cb interval:%lldms\n", cur_time - s_pre_time);
-    s_pre_time = cur_time;
-    VideoState *is = (VideoState *)ctx;
-    return is->abort_request;
-}
-
 AVDictionary **setup_find_stream_info_opts(AVFormatContext *s,
-                                           AVDictionary *codec_opts)
-{
+                                           AVDictionary *codec_opts) {
     int i;
     AVDictionary **opts;
 
@@ -46,8 +28,8 @@ int ff_demuxer_init(VideoState *is) {
 
     AVFormatContext *ic = NULL;
     int err, i, ret;
-    int st_index[AVMEDIA_TYPE_NB];
-    memset(st_index, -1, sizeof(st_index));
+    is->st_index[AVMEDIA_TYPE_NB];
+    memset(is->st_index, -1, sizeof(is->st_index));
     int scan_all_pmts_set = 0;
     AVDictionaryEntry *t;
     // 初始化为-1,如果一直为-1说明没相应steam
@@ -63,12 +45,7 @@ int ff_demuxer_init(VideoState *is) {
         goto fail;
     }
 
-    /* 2.设置中断回调函数，如果出错或者退出，就根据目前程序设置的状态选择继续check或者直接退出 */
-    /* 当执行耗时操作时（一般是在执行while或者for循环的数据读取时），会调用interrupt_callback.callback
-     * 回调函数中返回1则代表ffmpeg结束耗时操作退出当前函数的调用
-     * 回调函数中返回0则代表ffmpeg内部继续执行耗时操作，直到完成既定的任务(比如读取到既定的数据包)
-     */
-    ic->interrupt_callback.callback = decode_interrupt_cb;
+
     ic->interrupt_callback.opaque = is;
 
     //特定选项处理
@@ -154,7 +131,7 @@ int ff_demuxer_init(VideoState *is) {
         ret = avformat_seek_file(ic, -1, INT64_MIN, timestamp, INT64_MAX, 0);
         if (ret < 0) {
             av_log(NULL, AV_LOG_WARNING, "%s: could not seek to position %0.3f\n",
-                   is->filename, (double)timestamp / AV_TIME_BASE);
+                   is->filename, (double) timestamp / AV_TIME_BASE);
         }
     }
 
@@ -171,44 +148,44 @@ int ff_demuxer_init(VideoState *is) {
         AVStream *st = ic->streams[i];
         enum AVMediaType type = st->codecpar->codec_type;
         st->discard = AVDISCARD_ALL;
-        if (type >= 0 && wanted_stream_spec[type] && st_index[type] == -1)
+        if (type >= 0 && wanted_stream_spec[type] && is->st_index[type] == -1)
             if (avformat_match_stream_specifier(ic, st, wanted_stream_spec[type]) > 0)
-                st_index[type] = i;
+                is->st_index[type] = i;
     }
     for (i = 0; i < AVMEDIA_TYPE_NB; i++) {
-        if (wanted_stream_spec[i] && st_index[i] == -1) {
+        if (wanted_stream_spec[i] &&is-> st_index[i] == -1) {
             av_log(NULL, AV_LOG_ERROR, "Stream specifier %s does not match any %s stream\n",
                    wanted_stream_spec[i], av_get_media_type_string(i));
             //            st_index[i] = INT_MAX;
-            st_index[i] = -1;
+            is->st_index[i] = -1;
         }
     }
 
     // 6.2 利用av_find_best_stream选择流，
     if (!video_disable)
-        st_index[AVMEDIA_TYPE_VIDEO] =
+        is->st_index[AVMEDIA_TYPE_VIDEO] =
                 av_find_best_stream(ic, AVMEDIA_TYPE_VIDEO,
-                                    st_index[AVMEDIA_TYPE_VIDEO], -1, NULL, 0);
+                                    is->st_index[AVMEDIA_TYPE_VIDEO], -1, NULL, 0);
     if (!audio_disable)
-        st_index[AVMEDIA_TYPE_AUDIO] =
+        is->st_index[AVMEDIA_TYPE_AUDIO] =
                 av_find_best_stream(ic, AVMEDIA_TYPE_AUDIO,
-                                    st_index[AVMEDIA_TYPE_AUDIO],
-                                    st_index[AVMEDIA_TYPE_VIDEO],
+                                    is-> st_index[AVMEDIA_TYPE_AUDIO],
+                                    is->  st_index[AVMEDIA_TYPE_VIDEO],
                                     NULL, 0);
     if (!video_disable && !subtitle_disable)
-        st_index[AVMEDIA_TYPE_SUBTITLE] =
+        is-> st_index[AVMEDIA_TYPE_SUBTITLE] =
                 av_find_best_stream(ic, AVMEDIA_TYPE_SUBTITLE,
-                                    st_index[AVMEDIA_TYPE_SUBTITLE],
-                                    (st_index[AVMEDIA_TYPE_AUDIO] >= 0 ?
-                                     st_index[AVMEDIA_TYPE_AUDIO] :
-                                     st_index[AVMEDIA_TYPE_VIDEO]),
+                                    is-> st_index[AVMEDIA_TYPE_SUBTITLE],
+                                    (is->st_index[AVMEDIA_TYPE_AUDIO] >= 0 ?
+                                     is->st_index[AVMEDIA_TYPE_AUDIO] :
+                                     is->st_index[AVMEDIA_TYPE_VIDEO]),
                                     NULL, 0);
 
     is->show_mode = show_mode;
 
     //7 从待处理流中获取相关参数，设置显示窗口的宽度、高度及宽高比
-    if (st_index[AVMEDIA_TYPE_VIDEO] >= 0) {
-        AVStream *st = ic->streams[st_index[AVMEDIA_TYPE_VIDEO]];
+    if (is->st_index[AVMEDIA_TYPE_VIDEO] >= 0) {
+        AVStream *st = ic->streams[is->st_index[AVMEDIA_TYPE_VIDEO]];
         AVCodecParameters *codecpar = st->codecpar;
         //根据流和帧宽高比猜测视频帧的像素宽高比（像素的宽高比，注意不是图像的）
         AVRational sar = av_guess_sample_aspect_ratio(ic, st, NULL);
@@ -220,14 +197,17 @@ int ff_demuxer_init(VideoState *is) {
 
     //todo
 
-fail:
+    fail:
     ff_demuxer_close(is);
-    return 0;
+    ret = -1;
+    return ret;
 }
 
 void ff_demuxer_close(VideoState *is) {
     //todo ---
-
+    if (is->ic && !is->ic)
+        avformat_close_input(&is->ic);
+    is->ic = NULL;
 }
 
 int ff_demuxer_start(VideoState *is) {

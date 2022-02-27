@@ -51,6 +51,8 @@
 
 
 #define SAMPLE_ARRAY_SIZE (8 * 65536)
+/* we use about AUDIO_DIFF_AVG_NB A-V differences to make the average */
+#define AUDIO_DIFF_AVG_NB   20
 
 typedef struct MyAVPacketList {
     AVPacket pkt; //解封装后的数据
@@ -273,14 +275,17 @@ typedef struct VideoState {
     int last_video_stream, last_audio_stream, last_subtitle_stream;
 
     SDL_cond *continue_read_thread; // 当读取数据队列满了后进入休眠时，可以通过该condition唤醒读线程
+
+
+    int st_index[AVMEDIA_TYPE_NB];
 } VideoState;
 
 
-typedef struct FFplayer{
-    VideoState *is;//视频状态维护
+typedef struct FFplayer {
+    struct VideoState *is;//视频状态维护
     const char *filename;//播放地址
     AVInputFormat *iformat;//输入格式
-};
+}FFplayer;
 
 /* options specified by the user */
 static const char *input_filename;
@@ -292,15 +297,20 @@ static int find_stream_info = 1;
 static int64_t start_time = AV_NOPTS_VALUE;
 static int seek_by_bytes = -1;
 static int show_status = 1;
-static const char* wanted_stream_spec[AVMEDIA_TYPE_NB] = {0};
+static const char *wanted_stream_spec[AVMEDIA_TYPE_NB] = {0};
 static int audio_disable;
 static int video_disable;
 static int subtitle_disable;
 static int av_sync_type = AV_SYNC_AUDIO_MASTER;
 static enum ShowMode show_mode = SHOW_MODE_NONE;
-static int default_width  = 640;
+static const char *audio_codec_name;
+static const char *subtitle_codec_name;
+static const char *video_codec_name;
+static int default_width = 640;
 static int default_height = 480;
-static int screen_width  = 0;
+static int screen_width = 0;
 static int screen_height = 0;
-
+static int infinite_buffer = -1;
+static int lowres = 0;//低分辨率
+static int fast = 0;
 #endif //YKAVSTUDYPLATFORM_FF_TOOLS_H

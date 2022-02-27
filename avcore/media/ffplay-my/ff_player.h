@@ -12,24 +12,7 @@
 #include "ff_decoder.h"
 #include "ff_av_clock.h"
 
-/**
- * 创建一个播放器
- * @return
- */
-struct FFplayer *ff_player_create();
 
-/**
- * 释放一个播放器
- * @param player
- */
-void ff_player_free(struct FFplayer *player);
-
-/**
- * 做一些准备工作
- * @param player
- * @return
- */
-int ff_player_init(struct FFplayer *player);
 
 void set_default_window_size(int width, int height, AVRational sar);
 
@@ -49,4 +32,32 @@ void set_default_window_size(int width, int height, AVRational sar);
 void calculate_display_rect(SDL_Rect *rect,
                             int scr_xleft, int scr_ytop, int scr_width, int scr_height,
                             int pic_width, int pic_height, AVRational pic_sar);
+
+
+//######################### 暴露 api   ###############################
+/**
+ * 创建一个播放器
+ * @return
+ */
+struct FFplayer *ff_player_create();
+
+/**
+ * 释放一个播放器
+ * @param player
+ */
+void ff_player_free(struct FFplayer *player);
+
+/**
+ * 做一些准备工作
+ * @param player
+ * @return
+ */
+int ff_player_init(struct FFplayer *player);
+
+/**
+ * 开始播放
+ * @param player  播放器 id
+ * @return
+ */
+int ff_player_start(long player);
 #endif //YKAVSTUDYPLATFORM_FF_PLAYER_H

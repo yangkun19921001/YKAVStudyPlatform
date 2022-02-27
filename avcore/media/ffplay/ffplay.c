@@ -1298,7 +1298,17 @@ static void do_exit(VideoState *is) {
 static void sigterm_handler(int sig) {
     exit(123);
 }
-
+static void set_default_window_size(int width, int height, AVRational sar)
+{
+    SDL_Rect rect;
+    int max_width  = screen_width  ? screen_width  : INT_MAX; // 确定是否指定窗口最大宽度
+    int max_height = screen_height ? screen_height : INT_MAX; // 确定是否指定窗口最大高度
+    if (max_width == INT_MAX && max_height == INT_MAX)
+        max_height = height;    // 没有指定最大高度时则使用视频的高度
+    calculate_display_rect(&rect, 0, 0, max_width, max_height, width, height, sar);
+    default_width  = rect.w; // 实际是渲染区域的宽高
+    default_height = rect.h;
+}
 
 
 static int video_open(VideoState *is) {
@@ -2711,6 +2721,8 @@ static int is_realtime(AVFormatContext *s) {
         return 1;
     return 0;
 }
+
+
 
 /* this thread gets the stream from the disk or the network */
 static int read_thread(void *arg) {

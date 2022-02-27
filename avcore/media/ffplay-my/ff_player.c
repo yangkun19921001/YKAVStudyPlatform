@@ -10,10 +10,10 @@ struct FFplayer *ff_player_create() {
     struct FFplayer *fFplayer = NULL;
     if (!(is = (av_malloc(sizeof(VideoState)))))
         return NULL;
-    memset(is, 0, sizeof(sizeof(VideoState)));
+    memset(is, 0, sizeof(VideoState));
     if (!(fFplayer = (av_malloc(sizeof(struct FFplayer)))))
         return NULL;
-    memset(fFplayer, 0, sizeof(sizeof(struct FFplayer)));
+    memset(fFplayer, 0, sizeof(struct FFplayer));
     fFplayer->is = is;
     return fFplayer;
 }
@@ -76,11 +76,14 @@ int ff_player_init(struct FFplayer *player) {
     is->audio_volume = startup_volume;
     is->muted = 0;
     //todo 同步类型，默认以音频为基准
-//    is->av_sync_type = av_sync_type;
+    is->av_sync_type = av_sync_type;
 
     //解封装初始化
     int ret = ff_demuxer_init(is);
     if (ret != 0)
+        goto fail;
+    ret = ff_decoder_init(is);
+    if (ret < 0)
         goto fail;
     ff_demuxer_start(is);
     fail:
@@ -89,7 +92,16 @@ int ff_player_init(struct FFplayer *player) {
     return 0;
 }
 
- void set_default_window_size(int width, int height, AVRational sar) {
+int ff_player_start(long play_id) {
+    int ret;
+    if (play_id > 0) {
+        FFplayer *player = (struct FFplayer *) play_id;
+        ret =  ff_demuxer_start(player->is);
+    }
+    return 0;
+}
+
+void set_default_window_size(int width, int height, AVRational sar) {
     SDL_Rect rect;
     int max_width = screen_width ? screen_width : INT_MAX;
     int max_height = screen_height ? screen_height : INT_MAX;
@@ -102,8 +114,7 @@ int ff_player_init(struct FFplayer *player) {
 
 void calculate_display_rect(SDL_Rect *rect,
                             int scr_xleft, int scr_ytop, int scr_width, int scr_height,
-                            int pic_width, int pic_height, AVRational pic_sar)
-{
+                            int pic_width, int pic_height, AVRational pic_sar) {
     AVRational aspect_ratio = pic_sar; // 比率
     int64_t width, height, x, y;
 
@@ -127,7 +138,7 @@ void calculate_display_rect(SDL_Rect *rect,
     x = (scr_width - width) / 2;
     y = (scr_height - height) / 2;
     rect->x = scr_xleft + x;
-    rect->y = scr_ytop  + y;
-    rect->w = FFMAX((int)width,  1);
-    rect->h = FFMAX((int)height, 1);
+    rect->y = scr_ytop + y;
+    rect->w = FFMAX((int) width, 1);
+    rect->h = FFMAX((int) height, 1);
 }
